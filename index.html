@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Isaac_©ode</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fcb69f, #ffdde1);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      text-align: center;
+      color: white;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: background 1s ease-in-out, background-image 1s ease-in-out;
+    }
+    
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    }
+    
+    #btnStart {
+      font-size: 70px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      color: red;
+      animation: palpitar 1.5s infinite;
+      transition: transform 0.3s;
+    }
+    
+    #btnStart:hover {
+      transform: scale(1.2);
+    }
+    
+    @keyframes palpitar {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    
+    #frase {
+      margin-top: 40px;
+      font-size: 1.8em;
+      font-style: italic;
+      min-height: 80px;
+      opacity: 0;
+      transition: opacity 0.8s;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+      padding: 0 20px;
+      max-width: 80%;
+    }
+    
+    .corazones {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    
+    .corazon {
+      position: absolute;
+      color: rgba(255,255,255,0.9);
+      font-size: 20px;
+      animation: flotar 8s linear infinite;
+    }
+    
+    @keyframes flotar {
+      0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+    
+    #final {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      font-size: 2em;
+      font-weight: bold;
+      background: linear-gradient(90deg, gold, pink, gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      animation: aparecer 5s ease forwards;
+      animation-delay: 100s; /* ajustar duración */
+    }
+    
+    @keyframes aparecer {
+      to { opacity: 1; }
+    }
+    
+    .progress-container {
+      width: 80%;
+      max-width: 500px;
+      height: 8px;
+      background-color: rgba(255,255,255,0.3);
+      border-radius: 4px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background-color: rgba(255,255,255,0.7);
+      width: 0%;
+      transition: width 0.3s;
+    }
+    
+    .time-display {
+      margin-top: 10px;
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    /* === Extras === */
+    .carousel {
+      margin-top: 20px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    .carousel img {
+      width: 100%;
+      display: none;
+    }
+    .carousel img.active {
+      display: block;
+    }
+
+    #btnCarta {
+      margin-top: 20px;
+      padding: 15px 25px;
+      font-size: 1.3em;
+      border: none;
+      border-radius: 30px;
+      background: pink;
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .carta {
+      display: none;
+      margin-top: 20px;
+      background: white;
+      color: #333;
+      padding: 20px;
+      border-radius: 15px;
+      width: 80%;
+      max-width: 400px;
+      text-align: left;
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.4em;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+    /* === Carta 3D === */
+.carta {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 1s;
+}
+.carta.open {
+  transform: rotateY(180deg);
+}
+
+/* === Modal elegante === */
+.modal {
+  display:none; 
+  position:fixed; 
+  top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.7);
+  justify-content:center; align-items:center;
+}
+.modal-content {
+  background:white; color:#333; padding:20px;
+  border-radius:20px; max-width:600px; width:80%;
+  animation: zoomIn 0.6s ease;
+}
+.modal-content img {
+  width:100px; margin:10px; border-radius:15px; box-shadow:0 0 8px rgba(0,0,0,0.3);
+}
+@keyframes zoomIn { from {transform:scale(0.5); opacity:0;} to {transform:scale(1); opacity:1;} }
+
+/* === Pétalos de rosas === */
+.petal {
+  position:absolute;
+  top:-50px;
+  font-size:24px;
+  animation: caer 8s linear infinite;
+}
+@keyframes caer {
+  0% { transform:translateY(0) rotate(0deg); opacity:1; }
+  100% { transform:translateY(100vh) rotate(360deg); opacity:0; }
+}
+  </style>
+</head>
+<body>
+  <h1>Me Cambiaste la Vida 💕</h1>
+  <p style="font-size:1.2em">✨ Toca el corazón para dedicar esta canción ✨</p>
+  <button id="btnStart">❤️</button>
+  <div id="frase"></div>
+  
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+
+  <audio id="musica">
+    <source src="Eres el sol que ilumina todo mi existir✨ Me Cambiaste La Vida - Río Roma _letras _status _rolitas _romantic _clasicos _fypシ゚viral _letrasdecanciones (.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <div class="corazones" id="corazones"></div>
+  <div id="final">✨ Eres el sol que ilumina todo mi existir ✨</div>
+
+  <!-- === CARRUSEL === -->
+  <div class="carousel" id="carousel">
+    <img src="juli3.jpg" class="active">
+    <img src="juli4.jpg" class="active"> 
+    <img src="juli6.jpg">
+  </div>
+
+  <!-- === BOTÓN CARTA === -->
+  <button id="btnCarta">💌 Abrir Carta</button>
+  <div class="carta" id="carta">
+    <h2>Para ti ❤️</h2>
+    <p>Desde que llegaste a mi vida, todo cambió...  
+       Eres el sol que ilumina mi existir 🌞.  
+       Te amo infinitamente 💖</p>
+  </div>
+  <!-- === JUEGO ROMÁNTICO PRO === -->
+<div id="rompeCorazones" style="display:none; margin-top:30px;">
+  <h2 style="color:#ff004c;">💘 Rompe Corazones 💘</h2>
+  <canvas id="juegoCanvas" width="400" height="400" style="background:rgba(255,255,255,0.1); border-radius:20px;"></canvas>
+  <p id="puntos" style="font-size:1.2em; margin-top:10px;">Puntos: 0</p>
+</div>
+
+<!-- === MODAL DE RECUERDOS === -->
+<div id="modalRecuerdos" class="modal">
+  <div class="modal-content">
+    <span id="cerrarModal">&times;</span>
+    <h2>Nuestros Recuerdos 💞</h2>
+    <div class="galeria">
+      <img src="juli1.jpg">
+      <img src="juli2.jpg">
+      <img src="juli3.jpg">
+    </div>
+  </div>
+</div>
+<button id="btnRecuerdos" style="margin-top:20px; padding:12px 25px; border:none; border-radius:30px; background:#ff4b7d; color:white; font-weight:bold;">🌟 Ver Recuerdos</button>
+
+  <script>
+    const btn = document.getElementById("btnStart");
+    const musica = document.getElementById("musica");
+    const frase = document.getElementById("frase");
+    const progressBar = document.getElementById("progressBar");
+    const timeDisplay = document.getElementById("timeDisplay");
+
+    const lyricTimestamps = [
+      { time: 0, text: "🎵 Me Cambiaste la Vida - Rio Roma 🎵" },
+      { time: 3, text: "Tan hermosa eres por fuera" },
+      { time: 6, text: "Como nadie en la tierra" },
+      { time: 13, text: "Y en tu interior habita la nobleza y la bondad" },
+      { time: 20, text: "Hoy la palabra amor tiene otra dimensión" },
+      { time: 27, text: "Día y noche pido al cielo por los dos" },
+      { time: 33.5, text: "Ahora todo es tan claro es a ti a quién yo amo" },
+      { time: 40, text: "Me devolviste la ilusión tú me cambiaste la vida" },
+      { time: 44, text: "Desde que llegaste a mí" },
+      { time: 51, text: "Eres el sol que ilumina todo mi existir" },
+      { time: 78, text: "✨ Eres un sueño perfecto todo lo encuentro en ti 💕" }
+    ];
+
+    let currentIndex = 0;
+    let syncInterval;
+
+    btn.addEventListener("click", () => {
+      musica.play();
+      btn.style.display = "none";
+      startSync();
+      updateProgress();
+    });
+
+    function startSync() {
+      syncInterval = setInterval(() => {
+        const now = musica.currentTime;
+        updateProgress();
+        
+        if (currentIndex < lyricTimestamps.length && now >= lyricTimestamps[currentIndex].time) {
+          frase.style.opacity = 0;
+          setTimeout(() => {
+            frase.textContent = lyricTimestamps[currentIndex].text;
+            frase.style.opacity = 1;
+          }, 200);
+          currentIndex++;
+        }
+        
+        if (musica.ended) {
+          clearInterval(syncInterval);
+          btn.style.display = "block";
+          currentIndex = 0;
+        }
+      }, 100);
+    }
+
+    function updateProgress() {
+      const currentTime = musica.currentTime;
+      const duration = musica.duration || 0;
+      
+      if (duration > 0) {
+        const progressPercent = (currentTime / duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+        
+        const formatTime = (time) => {
+          const minutes = Math.floor(time / 60);
+          const seconds = Math.floor(time % 60);
+          return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        };
+        
+        timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+      }
+    }
+
+    // Corazones flotantes
+    const container = document.getElementById("corazones");
+    function crearCorazon() {
+      const c = document.createElement("div");
+      c.classList.add("corazon");
+      c.innerHTML = "❤️";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.fontSize = Math.random() * 30 + 15 + "px";
+      c.style.animationDuration = (Math.random() * 5 + 5) + "s";
+      container.appendChild(c);
+      setTimeout(() => c.remove(), 10000);
+    }
+    setInterval(crearCorazon, 500);
+
+    // Carrusel automático
+    const images = document.querySelectorAll("#carousel img");
+    let idx = 0;
+    setInterval(() => {
+      images[idx].classList.remove("active");
+      idx = (idx + 1) % images.length;
+      images[idx].classList.add("active");
+    }, 3000);
+
+    // Carta
+    const btnCarta = document.getElementById("btnCarta");
+    const carta = document.getElementById("carta");
+    btnCarta.addEventListener("click", () => {
+      carta.style.display = "block";
+      document.body.style.backgroundImage = "url('juli3.jpg')";
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+      
+      // === Juego RompeCorazones ===
+const canvas = document.getElementById("juegoCanvas");
+const ctx = canvas.getContext("2d");
+let puntos = 0;
+let corazones = [];
+function crearCorazonJuego() {
+  return {x:Math.random()*360, y:Math.random()*360, r:20};
+}
+function dibujar() {
+  ctx.clearRect(0,0,400,400);
+  corazones.forEach((c,i)=>{
+    ctx.beginPath();
+    ctx.fillStyle="red";
+    ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+    ctx.fill();
+  });
+}
+canvas.addEventListener("click",(e)=>{
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX-rect.left;
+  const y = e.clientY-rect.top;
+  corazones.forEach((c,i)=>{
+    const dist = Math.hypot(c.x-x,c.y-y);
+    if(dist < c.r){ puntos++; corazones.splice(i,1); document.getElementById("puntos").textContent="Puntos: "+puntos; }
+  });
+});
+setInterval(()=>{ if(corazones.length<5) corazones.push(crearCorazonJuego()); dibujar(); },1000);
+
+// === Mostrar juego después de carta ===
+btnCarta.addEventListener("click",()=>{document.getElementById("rompeCorazones").style.display="block";});
+
+// === Modal Recuerdos ===
+const modal = document.getElementById("modalRecuerdos");
+document.getElementById("btnRecuerdos").onclick=()=>modal.style.display="flex";
+document.getElementById("cerrarModal").onclick=()=>modal.style.display="none";
+
+
+function lluviaRosas(){
+  const petal=document.createElement("div");
+  petal.classList.add("petal");
+  petal.innerHTML="🌹";
+  petal.style.left=Math.random()*100+"vw";
+  petal.style.animationDuration=(Math.random()*5+5)+"s";
+  document.body.appendChild(petal);
+  setTimeout(()=>petal.remove(),10000);
+}
+setInterval(lluviaRosas,700);
+    });
+    
+  </script>
+</body>
+</html>
